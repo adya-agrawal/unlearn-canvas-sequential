@@ -38,7 +38,7 @@ if __name__ == "__main__":
     os.makedirs(args.output_dir, exist_ok=True)
     output_path = os.path.join(args.output_dir, f"{args.theme}.pth") if args.theme is not None else os.path.join(args.output_dir, "result.pth")
 
-    model = timm.create_model("vit_large_patch16_224.augreg_in21k", pretrained=True).to(device)
+    model = timm.create_model("vit_large_patch16_224.augreg_in21k", pretrained=False).to(device)
     num_classes = len(theme_available) if args.task == "style" else len(class_available)
     model.head = torch.nn.Linear(1024, num_classes).to(device)
     # load checkpoint

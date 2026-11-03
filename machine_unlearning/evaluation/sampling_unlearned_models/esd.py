@@ -52,8 +52,10 @@ def main():
     parser.add_argument("--steps", default=100, type=int)
     parser.add_argument("--config", default="configs/generate_sd.yaml", type=str)
     parser.add_argument("--theme", required=True, type=str)
+    parser.add_argument("--ckpt", type=str, default=None, help="Checkpoint to sample (defaults to the standard single-target path).")
+    parser.add_argument("--output_dir", type=str, default=None, help="Image output directory.")
     parser.add_argument("--cfg-text", default=9.0, type=float)
-    parser.add_argument("--seed", type=int, default=188)
+    parser.add_argument("--seed", type=int, nargs="+", default=[188])
     parser.add_argument("--H", type=int, default=512, help="image height, in pixel space", )
     parser.add_argument("--W", type=int, default=512, help="image width, in pixel space", )
     parser.add_argument("--ddim_eta", type=float, default=0.0,
@@ -61,8 +63,8 @@ def main():
     args = parser.parse_args()
 
     # OPTML2
-    args.ckpt = f"../mu_erasing_concept_esd/results/style50/{args.theme}.pth"
-    args.output_dir = f"eval_results/mu_results/esd/style50/{args.theme}/"
+    args.ckpt = args.ckpt or f"../mu_erasing_concept_esd/results/style50/{args.theme}.pth"
+    args.output_dir = args.output_dir or f"eval_results/mu_results/esd/style50/{args.theme}/"
 
     config = OmegaConf.load(f"{args.config}")
     model = load_model_from_config(config, f"{args.ckpt}")
@@ -74,34 +76,27 @@ def main():
 
     # Extract the file name from a path
     os.makedirs(args.output_dir, exist_ok=True)
-    seed = args.seed
-    seed_everything(seed)
-    for test_theme in theme_available:
-        for object_class in class_available:
-            prompt = f"A {object_class} image in {test_theme.replace('_', ' ')} style."
-            cfg_text = args.cfg_text
-            with torch.no_grad():
-                with autocast("cuda"):
-                    with model.ema_scope():
-                        uc = model.get_learned_conditioning([""])
-                        c = model.get_learned_conditioning(prompt)
-                        shape = [4, args.H // 8, args.W // 8]  # downsampling factor 8
-                        samples_ddim, _ = sampler.sample(S=args.steps, conditioning=c, batch_size=1, shape=shape,
-                                                         verbose=False, unconditional_guidance_scale=cfg_text,
-                                                         unconditional_conditioning=uc, eta=args.ddim_eta, x_T=None)
-
-                        x_samples_ddim = model.decode_first_stage(samples_ddim)
-                        x_samples_ddim = torch.clamp((x_samples_ddim + 1.0) / 2.0, min=0.0, max=1.0)
-                        x_samples_ddim = x_samples_ddim.cpu().permute(0, 2, 3, 1)
-
-                        assert len(x_samples_ddim) == 1
-
-                        x_sample = x_samples_ddim[0]
-
-                        x_sample = (255. * x_sample.numpy()).round()
-                        x_sample = x_sample.astype(np.uint8)
-                        img = Image.fromarray(x_sample)
-                        img.save(os.path.join(args.output_dir, f"{test_theme}_{object_class}_seed{seed}.jpg"))
+    for seed in args.seed:
+        seed_everything(seed)
+        for test_theme in theme_available:
+            for object_class in class_available:
+                prompt = f"A {object_class} image in {test_theme.replace('_', ' ')} style."
+                cfg_text = args.cfg_text
+                with torch.no_grad():
+                    with autocast("cuda"):
+                        with model.ema_scope():
+                            uc = model.get_learned_conditioning([""])
+                            c = model.get_learned_conditioning(prompt)
+                            shape = [4, args.H // 8, args.W // 8]
+                            samples_ddim, _ = sampler.sample(S=args.steps, conditioning=c, batch_size=1, shape=shape,
+                                                             verbose=False, unconditional_guidance_scale=cfg_text,
+                                                             unconditional_conditioning=uc, eta=args.ddim_eta, x_T=None)
+                            x_samples_ddim = model.decode_first_stage(samples_ddim)
+                            x_samples_ddim = torch.clamp((x_samples_ddim + 1.0) / 2.0, min=0.0, max=1.0)
+                            x_samples_ddim = x_samples_ddim.cpu().permute(0, 2, 3, 1)
+                            x_sample = x_samples_ddim[0]
+                            x_sample = (255. * x_sample.numpy()).round().astype(np.uint8)
+                            Image.fromarray(x_sample).save(os.path.join(args.output_dir, f"{test_theme}_{object_class}_seed{seed}.jpg"))
 
 
 if __name__ == "__main__":

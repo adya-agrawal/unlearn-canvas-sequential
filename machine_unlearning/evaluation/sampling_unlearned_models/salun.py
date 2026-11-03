@@ -51,6 +51,8 @@ def main():
     parser.add_argument("--steps", default=100, type=int)
     parser.add_argument("--config", default="configs/generate_sd.yaml", type=str)
     parser.add_argument("--theme", required=True, type=str)
+    parser.add_argument("--ckpt", type=str, default=None, help="Checkpoint to sample (defaults to the standard single-target path).")
+    parser.add_argument("--output_dir", type=str, default=None, help="Image output directory.")
     parser.add_argument("--cfg-text", default=9.0, type=float)
     parser.add_argument("--seed", type=int, default=[188], nargs="+")
     parser.add_argument("--H", type=int, default=512, help="image height, in pixel space", )
@@ -60,8 +62,8 @@ def main():
     args = parser.parse_args()
 
     # OPTML2
-    args.ckpt = f"../mu_saliency_unlearn_salun/results/style50/{args.theme}/sd_0.4.ckpt"
-    args.output_dir = f"eval_results/mu_results/salun/style50/{args.theme}/"
+    args.ckpt = args.ckpt or f"../mu_saliency_unlearn_salun/results/style50/{args.theme}/sd_0.4.ckpt"
+    args.output_dir = args.output_dir or f"eval_results/mu_results/salun/style50/{args.theme}/"
 
     config = OmegaConf.load(f"{args.config}")
     model = load_model_from_config(config, f"{args.ckpt}")
