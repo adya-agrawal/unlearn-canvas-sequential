@@ -1,6 +1,6 @@
 # Sequential unlearning on PACE-ICE
 
-The submit script chains six requests (Abstractionism, Byzantine, Cartoon, Cold_Warm, Ukiyoe, Van_Gogh) for ESD, SalUn, and EDiff, then submits evaluation. Each request is a separate job to fit ICE's walltime. Paths default to `~/scratch`; SLURM uses `pace-ice-gpu` and H100. Check `sinfo` on ICE if your available partition/GPU differs.
+The submit script chains six requests (Abstractionism, Byzantine, Cartoon, Cold_Warm, Ukiyoe, Van_Gogh) for ESD, SalUn, and EDiff, then submits evaluation. Each request is a separate job to fit ICE's walltime. Paths default to `~/scratch`; SLURM uses `ice-gpu` and H100. Check `sinfo` on ICE if your available partition/GPU differs.
 
 Create the environment and keep Conda's cache off your quota-limited home directory:
 

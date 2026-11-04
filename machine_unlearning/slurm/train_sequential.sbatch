@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=uc_seq_train
-#SBATCH --partition=pace-ice-gpu
-#SBATCH --gres=gpu:H100:1
+#SBATCH --partition=ice-gpu
+#SBATCH --gres=gpu:h100:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=100G
 #SBATCH --time=08:00:00
