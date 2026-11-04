@@ -24,7 +24,6 @@ def load_model_from_config(config, ckpt, device="cpu", verbose=False):
         config = OmegaConf.load(config)
 
     pl_sd = torch.load(ckpt, map_location="cpu")
-    global_step = pl_sd["global_step"]
     sd = pl_sd["state_dict"]
     model = instantiate_from_config(config.model)
     m, u = model.load_state_dict(sd, strict=False)
