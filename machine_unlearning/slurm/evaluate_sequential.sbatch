@@ -58,7 +58,7 @@ accuracy_dir="$EVAL_ROOT/$method/step_$(printf '%02d' "$step")/accuracy"
 mkdir -p "$image_dir" "$accuracy_dir"
 
 cd "$PROJECT_ROOT/machine_unlearning/evaluation"
-export PYTHONPATH="$sampler_lib:$sampler_lib/stable_diffusion:${PYTHONPATH:-}"
+export PYTHONPATH="$PROJECT_ROOT/machine_unlearning/evaluation:$sampler_lib:$sampler_lib/stable_diffusion:${PYTHONPATH:-}"
 python "$sampler" --theme "sequential_step_${step}" --ckpt "$ckpt" --output_dir "$image_dir" --config "$sampler_lib/configs/generate_sd.yaml" --seed "${SEEDS[@]}"
 
 python quantitative/accuracy.py --input_dir "$image_dir" --output_dir "$accuracy_dir/style" --ckpt "$STYLE_CLASSIFIER" --task style --seed "${SEEDS[@]}"
