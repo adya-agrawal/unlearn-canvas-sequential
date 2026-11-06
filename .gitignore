@@ -8,3 +8,14 @@ __pycache__
 ./.tmp.drivedownload
 ./.tmp.driveupload
 deprecated
+
+# Generated evaluation outputs, logs, and downloaded datasets
+**/wandb/
+machine_unlearning/slurm/logs/
+data/
+
+# Model weights and checkpoints (add selected metric artifacts explicitly)
+*.ckpt
+*.safetensors
+*.pth
+*.pt
