@@ -10,7 +10,7 @@ REQUESTS = ["Abstractionism", "Byzantine", "Cartoon", "Cold_Warm", "Ukiyoe", "Va
 METHODS = ["esd", "salun", "ediff"]
 
 
-def load_accuracy(path: Path) -> dict[str, float]:
+def load_accuracy(path: Path):
     if not path.is_file():
         raise FileNotFoundError(f"Missing accuracy result: {path}")
     try:
