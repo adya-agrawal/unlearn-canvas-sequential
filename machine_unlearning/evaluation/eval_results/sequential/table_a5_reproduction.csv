@@ -1,0 +1,22 @@
+method,metric,request,T1,T2,T3,T4,T5,T6
+esd,UA,Abstractionism,100.0,100.0,100.0,100.0,100.0,100.0
+esd,UA,Byzantine,,100.0,100.0,100.0,100.0,100.0
+esd,UA,Cartoon,,,100.0,100.0,100.0,100.0
+esd,UA,Cold_Warm,,,,99.0,99.0,94.0
+esd,UA,Ukiyoe,,,,,99.0,100.0
+esd,UA,Van_Gogh,,,,,,100.0
+esd,RA,all retained concepts,84.0,62.54,46.13,36.17,25.4,16.44
+salun,UA,Abstractionism,92.0,85.0,92.0,89.0,90.0,93.0
+salun,UA,Byzantine,,85.0,93.0,89.0,94.0,100.0
+salun,UA,Cartoon,,,96.0,94.0,98.0,100.0
+salun,UA,Cold_Warm,,,,91.0,99.0,100.0
+salun,UA,Ukiyoe,,,,,97.0,100.0
+salun,UA,Van_Gogh,,,,,,95.0
+salun,RA,all retained concepts,89.22,85.08,76.28,74.44,67.12,62.78
+ediff,UA,Abstractionism,96.0,99.0,98.0,100.0,100.0,99.0
+ediff,UA,Byzantine,,100.0,100.0,100.0,100.0,100.0
+ediff,UA,Cartoon,,,100.0,100.0,100.0,99.0
+ediff,UA,Cold_Warm,,,,93.0,98.0,93.0
+ediff,UA,Ukiyoe,,,,,100.0,100.0
+ediff,UA,Van_Gogh,,,,,,100.0
+ediff,RA,all retained concepts,76.43,63.97,59.79,57.73,54.96,57.18
